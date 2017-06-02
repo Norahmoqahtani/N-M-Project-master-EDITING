@@ -22,7 +22,7 @@ function initMap() {
         zoom: 9,
         center: riyadh
     });
-    self.placeList = ko.obs
+    
     infowindow = new google.maps.InfoWindow();
     
     
