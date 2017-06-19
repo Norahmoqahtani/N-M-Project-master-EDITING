@@ -75,7 +75,7 @@ var InitMap = function () {
             self.filteredlist.push(new placeLoc(data));
         });
         // to knockout
-    //Source: http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
+        //Source: http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
         
         this.filteredlist().forEach(function (placeLoc) {
             
@@ -89,20 +89,20 @@ var InitMap = function () {
             infoWindow = new google.maps.InfoWindow();
             if (infowindow.marker !== marker) {
                 infowindow.marker = marker;
-            marker.addListener('click', function () {
-                infoWindow.marker = marker;
-                
-                infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
-                '<h4>' + placeLoc.description() + '</h4>');
-                
-                infoWindow.open(map, marker);
-            });
+                marker.addListener('click', function () {
+                    infoWindow.marker = marker;
+                    
+                    infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
+                    '<h4>' + placeLoc.description() + '</h4>');
+                    
+                    infoWindow.open(map, marker);
+                });
             }
         });
         
         
         //filter/search locations
-
+        
         self.locationsArray = ko.computed(function () {
             var search = self.searchList().toLowerCase();
             if (! search) {
@@ -140,7 +140,7 @@ var InitMap = function () {
             };
         });
         
-        
+        //click the list-view to show the location
         this.openInfo = function (placeLoc) {
             google.maps.event.trigger(placeLoc.marker, 'click');
         };
@@ -154,6 +154,7 @@ var InitMap = function () {
         this.position = ko.observable(data.position);
         this.showlist = ko.observable(true);
     };
+    //To apply bindings
     
     ko.applyBindings(new ViewModel());
 };
