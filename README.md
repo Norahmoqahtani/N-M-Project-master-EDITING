@@ -9,5 +9,14 @@ Develop a single page application featuring a map of your neighborhood or a neig
 Clone or download the repo and open index.html in the browser 
 
 
+#### Steps of project
+
+- Added at lease 5 locatons
+- Creaed dropdown list
+- infowindow
 
 
+### References:
+- http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
+- UDACITY LESSONS
+- http://knockoutjs.com/documentation/plugins-mapping.html

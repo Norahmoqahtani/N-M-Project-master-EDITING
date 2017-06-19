@@ -1,156 +1,172 @@
 
-//locations
-'use strict';
-var locations =[ 
-[ 'King Abdul Aziz Park', 24.62105, 46.77263, 5],
-[ 'King Abdullah Park', 24.6660, 46.7376, 4],
-[ 'King Salman Safari Park', 25.0054, 46.6020, 3],
-[ 'Rawdah Park', 24.7317, 46.7756, 2],
-[ 'Salam Park', 24.6213, 46.7083, 1],
-[ 'Riyadh Hills Park', 24.550297, 46.724340, 0]
-];
-
+//Locations
+var locations =[ {
+    title: 'King Salman Safari Park',
+    position: {
+        lat: 25.0054,
+        lng: 46.6020
+    },
+    description: 'located at northwest side of King Khaled International Airport and about 22 km from Riyadh City. The park has been designed to have a small valleys and rocky formations, which resembles the Najd region, thus giving it a natural beauty and distinctiveness from other parks in the city.'
+}, {
+    title: ' King Abdullah Park',
+    position: {
+        lat: 24.6660,
+        lng: 46.7376
+    },
+    description: 'The king Abdullah Park is a renowned park in Riyadh named in honour of the late and popular emperor of Saudhi Arabia, King Abdullah. The park was established in the year 2003 by Prince Turki Bin Abdul Aziz, the Deputy Governor of Riyadh.'
+}, {
+    title: ' Salam Park',
+    position: {
+        lat: 24.6213,
+        lng: 46.7083
+    },
+    description: 'Salam Park represents one of the natural elements for Riyadh City Center in Qasr Al Hokm area (Rule Palace), heart of Riyadh and its historical and heritage center that witnessed the start of march to the foundation of the modern Saudi State.  '
+}, {
+    title: ' Riyadh National Zoo Park',
+    position: {
+        lat: 24.7117,
+        lng: 46.7242
+    },
+    description: 'Riyadh National Zoo, in the heart of Malaz in Riyadh, is an easily accessible travel location for those visiting the city of Riyadh'
+}, {
+    title: 'Rawdah Park',
+    position: {
+        lat: 24.7317,
+        lng: 46.7756
+    },
+    description: 'This park is one of favourites of the Expatriates as it is an Open Park for Kids to do cycling, play in the sand, Skate, Other outdoor Games and Family can sit, chat and enjoy.'
+}, {
+    title: ' King Abdul Aziz Historical Centre',
+    position: {
+        lat: 24.62105,
+        lng: 46.77263
+    },
+    description: 'is the former compound of the Murabba Palace, that was built in 1936/37 by King Abdul Aziz about one and a half kilometers to the north of the old city and well outside of the then still existing city walls.'
+}];
+var infoWindow;
+var markers =[];
 var map;
-var marker;
-var infowindow;
 
- //initMap
-function InitMap() {
-    'use strict';
-    
-    var riyadh = {
-        lat: 24.774265, lng: 46.738586
-    };
-    var map = new google.maps.Map(document.getElementById('map'), {
+//initMap
+var InitMap = function () {
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {
+            lat: 24.774265,
+            lng: 46.738586
+        },
         zoom: 9,
-        center: riyadh,
         mapTypeId: 'roadmap'
     });
     
-    self.map = InitMap;
-    
     infowindow = new google.maps.InfoWindow();
     
+    //view model
     
-    //Mrkers
-    var markerLocation = function (data) {
-        
-        var self = this;
-        this.name = data.name;
-        this.lat = data.lat;
-        this.lng = data.lng;
-        
-        var marker = new google.maps.Marker({
-            map: map,
-            name: name,
-            animation: google.maps.Animation.DROP
-        });
-        
-        locations.forEach(function (markerLocation, i) {
-            position = markerLocation.locations;
-            name = markerLocation.name;
-            id: i
-        });
-    }
-    //Markers
-    //Source: http://en.marnoto.com/2013/12/mapa-com-varios-marcadores-google-maps.html
-    var marker, i;
-    
-    for (i = 0; i < locations.length; i++) {
-        marker = new google.maps.Marker({
-            position: new google.maps.LatLng(locations[i][1], locations[i][2], locations[i][3], locations[i][4], locations[i][5]),
-            map: map
-        });
-        
-        google.maps.event.addListener(marker, 'click', (function (marker, i) {
-            return function () {
-                infowindow.setContent(locations[i][0]);
-                infowindow.open(map, marker);
-            }
-        })(marker, i));
-    }
-    
-    //View Model
-    
-    function ViewModel() {
+    var ViewModel = function () {
         'use strict';
+        
         var self = this;
         self.markers =[];
-        self.locations =[];
-        self.searchList = ko.observable("");
-        self.placesList = ko.observableArray([]);
+        self.searchList = ko.observable('');
+        self.filteredlist = ko.observableArray([]);
+        self.locations = ko.observableArray([]);
         
+        locations.forEach(function (data) {
+            self.filteredlist.push(new placeLoc(data));
+        });
+        // to knockout
+    //Source: http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
         
-        //Source: Udacity lesson
-        function populateInfoWindow(marker, infowindow) {
+        this.filteredlist().forEach(function (placeLoc) {
             
-            // Check to make sure the infowindow is not already open on this marker
+            var marker = new google.maps.Marker({
+                map: map,
+                position: placeLoc.position(),
+                animation: google.maps.Animation.DROP
+            });
+            //create infowindow
+            placeLoc.marker = marker;
+            infoWindow = new google.maps.InfoWindow();
             if (infowindow.marker !== marker) {
                 infowindow.marker = marker;
-                infowindow.setContent('<div>' + marker.name + '</div>');
-                infowindow.open(map, marker);
+            marker.addListener('click', function () {
+                infoWindow.marker = marker;
                 
-                // Clear the .marker property if the infowindow is closed
-                infowindow.addListener('closeclick', function () {
-                    infowindow.marker = null;
-                });
+                infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
+                '<h4>' + placeLoc.description() + '</h4>');
+                
+                infoWindow.open(map, marker);
+            });
             }
-        }
-     ko.applyBindings(ViewModel);
+        });
+        
+        
+        //filter/search locations
 
-    }
-    
-    // Google Map error
-    mapError = function () {
-        document.getElementById('map-error').innerHTML = "<h2>Google Maps is not loading. Please try refreshing the page later.</h2>";
+        self.locationsArray = ko.computed(function () {
+            var search = self.searchList().toLowerCase();
+            if (! search) {
+                self.filteredlist().forEach(function (placeLoc) {
+                });
+            } else {
+                self.filteredlist().forEach(function (placeLoc) {
+                    
+                    if (placeLoc.title().toLowerCase().indexOf(search) >= 0) {
+                        placeLoc.showlist(true);
+                    } else {
+                        placeLoc.showlist(false);
+                    }
+                });
+                return this.filteredlist();
+            };
+            
+            
+            //Foursquare API
+            function FoursquareId(data) {
+                var venueid = data.foursquareid;
+                var foursquareId = 'https://api.foursquare.com/v2/venues/' + venueid + '?oauth_token=1K3HF3KW5HLOLXDC2NJQAZMBSVASUWMF0BTA5KF4WELFFGHE&v=20170603' + this.title;
+                var result = data.response.venue;
+                
+                $.ajax({
+                    url: foursquareId,
+                    dataType: "json",
+                    success: function (resp) {
+                        console.log(resp);
+                        
+                        // infowindow.setContent(info);
+                        //infowindow.open(map, marker);
+                    }
+                });
+            };
+        });
+        
+        
+        this.openInfo = function (placeLoc) {
+            google.maps.event.trigger(placeLoc.marker, 'click');
+        };
     };
-
-
-///////////////////////////////////////////
-// to knockout
-//Source: http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
-locations.forEach(function (position) {
-    self.placesList.push(new markerLocation(position));
-});
-self.locationsArray = ko.computed(function () {
-    var filteredList = self.searchList().toLowerCase();
-    if (filteredList) {
-        return ko.utils.arrayFilter(this.placesList(), function (position) {
-            var name = position.name.toLowerCase();
-            var result = (name.search(filteredList) >= 0);
-            position.observable(result);
-            return result;
-        });
-    } else {
-        this.placesList().forEach(function (position) {
-            position.observable(true);
-        });
-        return this.placesList();
-    }
-},
-self);
-
-//Foursquare API
-function FoursquareId(data) {
-    var venueid = data.foursquareid;
-    var foursquareId = 'https://api.foursquare.com/v2/venues/' + venueid + '?oauth_token=1K3HF3KW5HLOLXDC2NJQAZMBSVASUWMF0BTA5KF4WELFFGHE&v=20170603' + this.name;
-    var result = data.response.venue;
     
-    $.ajax({
-        url: foursquareId,
-        success: function (info) {
-            infowindow.setContent(info);
-            infowindow.open(map, marker);
-        }
-    });
-}
-}
-//Menu bar Source: W3School
-//  click event listener to open infowindow for each marker
+    
+    var placeLoc = function (data) {
+        var self = this;
+        this.title = ko.observable(data.title);
+        this.description = ko.observable(data.description);
+        this.position = ko.observable(data.position);
+        this.showlist = ko.observable(true);
+    };
+    
+    ko.applyBindings(new ViewModel());
+};
+
+//Show/hide Nav / source:w3school
 function openNav() {
     document.getElementById("mySidenav").style.width = "300px";
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+}
+//Google Map Error
+function googleError() {
+    window.alert("I'm sorry there has been an error with Google Maps.");
 }
