@@ -60,8 +60,7 @@ var InitMap = function () {
     
     infowindow = new google.maps.InfoWindow();
     
-    //view model
-    
+    //view model 
     var ViewModel = function () {
         'use strict';
         
@@ -71,12 +70,20 @@ var InitMap = function () {
         self.filteredlist = ko.observableArray([]);
         self.locations = ko.observableArray([]);
         
+        //create marker for each location and lsit view   
+         var placeLoc = function (data) {
+        var self = this;
+        this.title = ko.observable(data.title);
+        this.description = ko.observable(data.description);
+        this.position = ko.observable(data.position);
+        this.showlist = ko.observable(true);
+    };
         locations.forEach(function (data) {
             self.filteredlist.push(new placeLoc(data));
         });
         // to knockout
         //Source: http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
-        
+       
         this.filteredlist().forEach(function (placeLoc) {
             
             var marker = new google.maps.Marker({
@@ -87,11 +94,12 @@ var InitMap = function () {
             //create infowindow
             placeLoc.marker = marker;
             infoWindow = new google.maps.InfoWindow();
+                //check for opened windows
             if (infowindow.marker !== marker) {
                 infowindow.marker = marker;
                 marker.addListener('click', function () {
                     infoWindow.marker = marker;
-                    
+                    //infowindow descripton
                     infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
                     '<h4>' + placeLoc.description() + '</h4>');
                     
@@ -99,10 +107,8 @@ var InitMap = function () {
                 });
             }
         });
-        
-        
-        //filter/search locations
-        
+  
+        //filter/search locations 
         self.locationsArray = ko.computed(function () {
             var search = self.searchList().toLowerCase();
             if (! search) {
@@ -132,9 +138,6 @@ var InitMap = function () {
                     dataType: "json",
                     success: function (resp) {
                         console.log(resp);
-                        
-                        // infowindow.setContent(info);
-                        //infowindow.open(map, marker);
                     }
                 });
             };
@@ -145,17 +148,8 @@ var InitMap = function () {
             google.maps.event.trigger(placeLoc.marker, 'click');
         };
     };
-    
-    
-    var placeLoc = function (data) {
-        var self = this;
-        this.title = ko.observable(data.title);
-        this.description = ko.observable(data.description);
-        this.position = ko.observable(data.position);
-        this.showlist = ko.observable(true);
-    };
-    //To apply bindings
-    
+       
+    //To apply bindings   
     ko.applyBindings(new ViewModel());
 };
 
