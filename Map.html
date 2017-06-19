@@ -10,33 +10,46 @@
              
   </head>
   <body>
-    <div class="container">
+    <!--  <div class="container">
       <div class="side-filter">
         <input id="place-input" class="search-text" type="text" placeholder="Search Box" data-bind="input-text">
       <div id="map"></div>
     </div> 
-    </div> 
+    </div> -->
       
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+    <main id="row">
       
-     <!--
-    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
-      
-      <ul id="myUL">
+      <div>
+        <h1> Parks in Riyadh</h1>
+      </div>
+    </main>
+    <div id="container">
+      <div id="map"></div>
+      <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         
-        <li><a href="#">King Abdul Aziz Park</a></li>
-        <li><a href="#">King Abdullah Park</a></li>
-        <li><a href="#">King Salman Safari Park</a></li>
-        <li><a href="#">Rawdah Park</a></li>
-        <li><a href="#">Rawdah Park</a></li>
-
-      </ul> -->
+        <nav id="navigation">
+          <div class="container">
+            <input type="text" value="" id="search_list_bar" class="search_list_bar" data-bind="textInput: searchList" placeholder="Search location">
+          </div>
+          <ul class="position" data-bind="foreach:locationsArray">
+            
+            <li class="placeslist" data-bind="text: name, click: $parent.showLocation"></li>
+          </ul>
+        </nav>
+        
+      </div>
+      <div id="map-error"></div>
+    
      
  
     
     <script src="js/app.js"></script>
-    <script src="js/knockout-3.4.2.js"></script>
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAPG0V89VgnwcfzoKTROEs2rF1HP-2Z_g&callback=initMap"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+      <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRLVV0Gl1JxIH90qCWawAeVy8k3npQTjY&callback=InitMap" onerror="mapError()"></script>
     
   </body>
 </html>
