@@ -124,7 +124,7 @@ var InitMap = function () {
                     }
                 });
                 return this.filteredlist();
-            };
+            }
             
             
             //Foursquare API
@@ -140,7 +140,7 @@ var InitMap = function () {
                         console.log(resp);
                     }
                 });
-            };
+            }
         });
         
         //click the list-view to show the location
