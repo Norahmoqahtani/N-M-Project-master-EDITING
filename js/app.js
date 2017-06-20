@@ -109,6 +109,8 @@ var InitMap = function () {
                         
                         infoWindow.open(map, marker);
                         infoWindow.addListener('closeclick', function () {
+                                infowindow.marker = null;
+
                         });
                     })
                 });
