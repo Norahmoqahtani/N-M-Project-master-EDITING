@@ -181,7 +181,7 @@ var InitMap = function () {
                     self.infowindow.setContent('<div><h4>Foursquare could not be loaded.</h4></div>');
                     self.infowindow.open(map, marker);
                 });
-            };
+            }
         });
         
         
@@ -228,3 +228,5 @@ function filterFunction() {
         }
     }
 }
+
+

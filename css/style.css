@@ -179,3 +179,15 @@
 .dropdown a:hover {background-color: #f1f1f1}
 
 .show {display:block;}
+
+
+
+
+@media screen and (min-width: 700px) {
+	.hide {
+		display: none;
+	}
+}
+.hide {
+    display: inline-block;
+}
