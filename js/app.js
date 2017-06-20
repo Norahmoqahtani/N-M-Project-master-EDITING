@@ -147,8 +147,9 @@ var InitMap = function () {
                         placeLoc.showlist(false);
                         /* added setMap */ placeLoc.marker.setMap();
                     }
-                });
-                return self.filteredlist
+                    return self.filteredlist();
+                },
+               self);
             }
             
             
