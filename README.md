@@ -20,4 +20,4 @@ Clone or download the repo and open index.html in the browser
 - http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
 - UDACITY LESSONS
 - http://knockoutjs.com/documentation/plugins-mapping.html
-- -https://faulknercs.github.io/Knockstrap
+- https://faulknercs.github.io/Knockstrap

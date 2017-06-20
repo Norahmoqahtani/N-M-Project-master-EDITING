@@ -60,6 +60,7 @@ var InitMap = function () {
     
     infowindow = new google.maps.InfoWindow();
     
+    //Source:knockoutjs
     //view model
     var ViewModel = function () {
         'use strict';
@@ -91,6 +92,7 @@ var InitMap = function () {
                 position: placeLoc.position(),
                 animation: google.maps.Animation.DROP
             });
+            
             //create infowindow
             placeLoc.marker = marker;
             infoWindow = new google.maps.InfoWindow();
@@ -100,40 +102,50 @@ var InitMap = function () {
                 marker.addListener('click', function () {
                     infoWindow.marker = marker;
                     this.setAnimation(google.maps.Animation.BOUNCE);
-                    setTimeout(function () {
+                    /* added setTimeOut */ setTimeout(function () {
                         marker.setAnimation(null);
+                        
                         //infowindow descripton
-                         
-                        infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
-                        '<h4>' + placeLoc.description() + '</h4>');
+                        
+                        // infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
+                        //'<h4>' + placeLoc.description() + '</h4>');
                         
                         infoWindow.open(map, marker);
-                        infoWindow.addListener('closeclick', function () {
-                                infowindow.marker = null;
-
+                        /*//*/ infoWindow.addListener('closeclick', function () {
+                            infowindow.marker = null;
                         });
-                    })
+                    });
+                    
+                    // var content;
+                    
+                    infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
+                    '<h4>' + placeLoc.description() + '</h4>');
+                    
+                    
+                    infoWindow.setContent(content);
                 });
             }
         });
         
         
         //filter/search locations
-         
+        
         self.locationsArray = ko.computed(function () {
             var search = self.searchList().toLowerCase();
             if (! search) {
                 self.filteredlist().forEach(function (placeLoc) {
                     placeLoc.showlist(true);
-                    placeLoc.marker.setVisible(true);
+                    /* added setVisible */ placeLoc.marker.setVisible(true);
                 });
             } else {
                 self.filteredlist().forEach(function (placeLoc) {
                     
                     if (placeLoc.title().toLowerCase().indexOf(search) >= 0) {
                         placeLoc.showlist(true);
+                        /* added setVisible */ placeLoc.marker.setVisible(true);
                     } else {
                         placeLoc.showlist(false);
+                        /* added setMap */ placeLoc.marker.setMap();
                     }
                 });
                 return self.filteredlist
