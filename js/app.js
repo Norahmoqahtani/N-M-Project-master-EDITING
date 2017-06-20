@@ -71,6 +71,7 @@ var InitMap = function () {
         self.filteredlist = ko.observableArray([]);
         self.locations = ko.observableArray([]);
         
+        
         //create marker for each location and lsit view
         var placeLoc = function (data) {
             var self = this;
@@ -93,6 +94,7 @@ var InitMap = function () {
                 animation: google.maps.Animation.DROP
             });
             
+            
             //create infowindow
             placeLoc.marker = marker;
             infoWindow = new google.maps.InfoWindow();
@@ -104,16 +106,16 @@ var InitMap = function () {
                     this.setAnimation(google.maps.Animation.BOUNCE);
                     /* added setTimeOut */ setTimeout(function () {
                         marker.setAnimation(null);
-                        
-                        //infowindow descripton
-                        
-                        // infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
-                        //'<h4>' + placeLoc.description() + '</h4>');
-                        
-                        infoWindow.open(map, marker);
-                        /*//*/ infoWindow.addListener('closeclick', function () {
-                            infowindow.marker = null;
-                        });
+                    },
+                    500);
+                    //infowindow descripton
+                    
+                    // infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
+                    //'<h4>' + placeLoc.description() + '</h4>');
+                    
+                    infoWindow.open(map, marker);
+                    /*//*/ infoWindow.addListener('closeclick', function () {
+                        infowindow.marker = null;
                     });
                     
                     // var content;
@@ -122,7 +124,7 @@ var InitMap = function () {
                     '<h4>' + placeLoc.description() + '</h4>');
                     
                     
-                    infoWindow.setContent(content);
+                    // infoWindow.setContent(content);
                 });
             }
         });
@@ -145,11 +147,11 @@ var InitMap = function () {
                         /* added setVisible */ placeLoc.marker.setVisible(true);
                     } else {
                         placeLoc.showlist(false);
-                        /* added setMap */ placeLoc.marker.setMap();
+                        /* added setMap */ placeLoc.marker.setVisible();
                     }
                     return self.filteredlist();
                 },
-               self);
+                self);
             }
             
             
@@ -179,15 +181,36 @@ var InitMap = function () {
     ko.applyBindings(new ViewModel());
 };
 
+
 //Show/hide Nav / source:w3school
-function openNav() {
-    document.getElementById("mySidenav").style.width = "300px";
+  function openNav() {
+document.getElementById("mySidenav").style.width = "300px";
 }
 
 function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
+document.getElementById("mySidenav").style.width = "0";
 }
 //Google Map Error
 function googleError() {
     window.alert("I'm sorry there has been an error with Google Maps.");
+}
+
+
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+function filterFunction() {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("myDropdown");
+    a = div.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+        if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+        } else {
+            a[i].style.display = "none";
+        }
+    }
 }

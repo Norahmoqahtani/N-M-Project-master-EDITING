@@ -11,22 +11,17 @@
 </head>
 
 <body>
+   
+    <div id="map"></div>
     
-    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
-    <main id="row">
+    <div class="dropdown">
         
-       
-    </main>
-    <div id="container">
-        <div id="map"></div>
-        <div id="mySidenav" class="sidenav">
-           <!--   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>-->
-            
-        <nav id="navigation">
-            <div class="search-bar-container">
-                
-                    <h1> Parks in Riyadh</h1>
-                
+        <span style="font-size:30px;cursor:pointer" onclick="myFunction()">&#9776; </span>
+        
+        <div id="myDropdown" class="dropdown-content">
+            <h1> Parks in Riyadh</h1>
+                <nav id="navigation">
+                    <div class="search-bar-container">
                 <input type="text" value="" id="search_bar" class="search_bar" data-bind="textInput: searchList" placeholder="Search location">
             </div>
             
