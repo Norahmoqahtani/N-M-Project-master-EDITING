@@ -54,7 +54,7 @@ var InitMap = function () {
             lat: 24.774265,
             lng: 46.738586
         },
-        zoom: 11,
+        zoom: 10,
         mapTypeId: 'roadmap'
     });
     
@@ -73,7 +73,7 @@ var InitMap = function () {
         
         //Foursquare API
         function FoursquareId(info) {
-            var venu = info.foursquareid;
+            var venue = info.foursquareid;
             var fourSquareApi = 'https://api.foursquare.com/v2/venues/search?ll=' + this.lat + ',' + this.lng +
             '&client_id=K4RE0VHCBPDS3TXGJDAC25ZNWWGLO3FNBYJBFXI5LY0X1GDC&client_secret=3R3KD0ICDOEINKPS05RVCA2R0EY5G0ZWAYYJEDFJXY0FPUDO=20170619&query=' + this.title;
             
