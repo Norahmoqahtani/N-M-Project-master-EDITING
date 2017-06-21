@@ -6,42 +6,42 @@ var locations =[ {
         lat: 25.0054,
         lng: 46.6020
     },
-    description: 'located at northwest side of King Khaled International Airport and about 22 km from Riyadh City. The park has been designed to have a small valleys and rocky formations, which resembles the Najd region, thus giving it a natural beauty and distinctiveness from other parks in the city.'
+    description: ' The park resembles the Najd region, giving it a natural beauty'
 }, {
     title: ' King Abdullah Park',
     position: {
         lat: 24.6660,
         lng: 46.7376
     },
-    description: 'The king Abdullah Park is a renowned park in Riyadh named in honour of the late and popular emperor of Saudhi Arabia, King Abdullah. The park was established in the year 2003 by Prince Turki Bin Abdul Aziz, the Deputy Governor of Riyadh.'
+    description: ' The park was established by Prince Turki Bin Abdul Aziz.'
 }, {
     title: ' Salam Park',
     position: {
         lat: 24.6213,
         lng: 46.7083
     },
-    description: 'Salam Park represents one of the natural elements for Riyadh City Center in Qasr Al Hokm area (Rule Palace), heart of Riyadh and its historical and heritage center that witnessed the start of march to the foundation of the modern Saudi State.  '
+    description: 'Salam Park represents one of the natural elements for Riyadh '
 }, {
     title: ' Riyadh National Zoo Park',
     position: {
         lat: 24.7117,
         lng: 46.7242
     },
-    description: 'Riyadh National Zoo, in the heart of Malaz in Riyadh, is an easily accessible travel location for those visiting the city of Riyadh'
+    description: ' is an easily accessible travel location for visiting the city'
 }, {
     title: 'Rawdah Park',
     position: {
         lat: 24.7317,
         lng: 46.7756
     },
-    description: 'This park is one of favourites of the Expatriates as it is an Open Park for Kids to do cycling, play in the sand, Skate, Other outdoor Games and Family can sit, chat and enjoy.'
+    description: ' Open Park for Kids to do cycling, play in the sand, Skate'
 }, {
     title: ' King Abdul Aziz Historical Centre',
     position: {
         lat: 24.62105,
         lng: 46.77263
     },
-    description: 'is the former compound of the Murabba Palace, that was built in 1936/37 by King Abdul Aziz about one and a half kilometers to the north of the old city and well outside of the then still existing city walls.'
+    description: 'It was built in 1936/37 by King Abdul Aziz'
 }];
 var infoWindow;
 var markers =[];
@@ -54,7 +54,7 @@ var InitMap = function () {
             lat: 24.774265,
             lng: 46.738586
         },
-        zoom: 9,
+        zoom: 11,
         mapTypeId: 'roadmap'
     });
     
@@ -71,6 +71,36 @@ var InitMap = function () {
         self.filteredlist = ko.observableArray([]);
         self.locations = ko.observableArray([]);
         
+        //Foursquare API
+        function FoursquareId(info) {
+            var venu = info.foursquareid;
+            var fourSquareApi = 'https://api.foursquare.com/v2/venues/search?ll=' + this.lat + ',' + this.lng +
+            '&client_id=K4RE0VHCBPDS3TXGJDAC25ZNWWGLO3FNBYJBFXI5LY0X1GDC&client_secret=3R3KD0ICDOEINKPS05RVCA2R0EY5G0ZWAYYJEDFJXY0FPUDO=20170619&query=' + this.title;
+            
+            var result = info.response.venue;
+            
+            $.ajax({
+                url: foursquareApi,
+                dataType: "json",
+                success: function (resp) {
+                    var venue = resp.response.venue.title;
+                    var description = resp.response.venue.locations.description ? resp.response.venue.locations.description: " ";
+                    
+                    infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
+                    '<h4>' + placeLoc.description() + '</h4>');
+                    
+                    console.log(resp);
+                }
+            }).fail(function (e) {
+                self.infowindow.setContent('<div><h4>Foursquare could not be loaded.</h4></div>');
+                self.infowindow.open(map, marker);
+            });
+            this.marker = new google.maps.Marker({
+                position: new google.maps.LatLng(data.lat, data. long),
+                map: map,
+                title: data.name
+            });
+        }
         
         //create marker for each location and lsit view
         var placeLoc = function (data) {
@@ -95,6 +125,7 @@ var InitMap = function () {
             });
             
             
+            
             //create infowindow
             placeLoc.marker = marker;
             infoWindow = new google.maps.InfoWindow();
@@ -104,22 +135,21 @@ var InitMap = function () {
                 marker.addListener('click', function () {
                     infoWindow.marker = marker;
                     this.setAnimation(google.maps.Animation.BOUNCE);
-    /* added setTimeOut */ setTimeout(function () {
+                    /* added setTimeOut */ setTimeout(function () {
                         marker.setAnimation(null);
                     },
                     500);
-                                    
+                    
                     infoWindow.open(map, marker);
-   /*added ti close infow*/ infoWindow.addListener('closeclick', function () {
+                    /*added ti close infow*/ infoWindow.addListener('closeclick', function () {
                         infowindow.marker = null;
                     });
-                                        
+                    
                     infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
                     '<h4>' + placeLoc.description() + '</h4>');
-                                       
+                    
                     // infoWindow.setContent(content);
                 });
-                
             }
         });
         
@@ -131,56 +161,23 @@ var InitMap = function () {
             if (! search) {
                 self.filteredlist().forEach(function (placeLoc) {
                     placeLoc.showlist(true);
-   /* added setVisible */ placeLoc.marker.setVisible(true);
+                    /* added setVisible */ placeLoc.marker.setVisible(true);
                 });
             } else {
                 self.filteredlist().forEach(function (placeLoc) {
                     
                     if (placeLoc.title().toLowerCase().indexOf(search) >= 0) {
                         placeLoc.showlist(true);
-  /* added setVisible */ placeLoc.marker.setVisible(true);
-                       return true;
-
+                        /* added setVisible */ placeLoc.marker.setVisible(true);
+                        return true;
                     } else {
                         placeLoc.showlist(false);
-  /* added setMap */ placeLoc.marker.setVisible(false);
-                     return false;
-
+                        /* added setMap */ placeLoc.marker.setVisible(false);
+                        return false;
                     }
-                   // return self.filteredlist();
+                    // return self.filteredlist();
                 },
                 self);
-            }
-            
-            
-            //Foursquare API
-            /*  */ function FoursquareId(data) {
-                var venu = data.foursquareid;
-                //var foursquareId = 'https://api.foursquare.com/v2/venues/' + venueid + '?oauth_token=1K3HF3KW5HLOLXDC2NJQAZMBSVASUWMF0BTA5KF4WELFFGHE&v=20170603' + this.title;
-                var fourSquareApi = 'https://api.foursquare.com/v2/venues/search?ll=' + this.lat + ',' + this.lng +
-                '&client_id=K4RE0VHCBPDS3TXGJDAC25ZNWWGLO3FNBYJBFXI5LY0X1GDC&client_secret=3R3KD0ICDOEINKPS05RVCA2R0EY5G0ZWAYYJEDFJXY0FPUDO=20170619&query=' + this.title;
-                
-                var result = data.response.venue;
-                
-                $.ajax({
-                    url: foursquareId,
-                    dataType: "json",
-                    success: function (info) {
-                        var venue = info.response.venue.title;
-                        var description = info.response.venue.locations.description ? info.response.venue.locations.description: " ";
-                        
-                        infoWindow.open(map, marker);
-                        
-                        
-                        infoWindow.setContent('<h2>' + placeLoc.title() + '</h2>' +
-                        '<h4>' + placeLoc.description() + '</h4>');
-                        
-                        console.log(info);
-                    }
-                }).fail(function (e) {
-                    self.infowindow.setContent('<div><h4>Foursquare could not be loaded.</h4></div>');
-                    self.infowindow.open(map, marker);
-                });
             }
         });
         
@@ -195,23 +192,13 @@ var InitMap = function () {
     ko.applyBindings(new ViewModel());
 };
 
-
-//Show/hide Nav / source:w3school
-function openNav() {
-    document.getElementById("mySidenav").style.width = "300px";
-}
-
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-}
 //Google Map Error
 function googleError() {
     window.alert("I'm sorry there has been an error with Google Maps.");
 }
 
-
 function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
+    document.getElementById("myDropdown").classList.toggle("showlist");
 }
 
 function filterFunction() {
@@ -228,5 +215,3 @@ function filterFunction() {
         }
     }
 }
-
-

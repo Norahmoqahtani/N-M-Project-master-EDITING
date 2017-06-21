@@ -3,9 +3,14 @@
 
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title> Parks in Riyadh</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="js/bootstrap-3.3.7-dist/js/bootstrap.min.js" rel="stylesheet"></link>
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
     
 
 </head>
@@ -19,11 +24,21 @@
         <span style="font-size:30px;cursor:pointer" onclick="myFunction()">&#9776; </span>
         
         <div id="myDropdown" class="dropdown-content">
+            
+            <div class="navbar hidden-tablet hidden-phone">
+                
             <h1> Parks in Riyadh</h1>
                 <nav id="navigation">
                     <div class="search-bar-container">
                 <input type="text" value="" id="search_bar" class="search_bar" data-bind="textInput: searchList" placeholder="Search location">
             </div>
+                    
+                    <ul class="place_list" data-bind="foreach:filteredlist">
+                        <li class="items" data-bind="text:title,click:$parent.openInfo,visible:showlist"></li>
+                    </ul>
+                </nav>
+        </div> 
+                  
                     <!-- <div id="mySidenav" class="sidenav">
                         <!--   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             
@@ -33,18 +48,13 @@
                 
                 <input type="text" value="" id="search_bar" class="search_bar" data-bind="textInput: searchList" placeholder="Search location">
             </div> -->
-            <ul class="place_list" data-bind="foreach:filteredlist">
-                <li class="items" data-bind="text:title,click:$parent.openInfo,visible:showlist"></li>
-            </ul>
-        </nav>
-    </div>
+            
     <div id="map-error"></div>
     <script src="js/app.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>       
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRLVV0Gl1JxIH90qCWawAeVy8k3npQTjY&callback=InitMap" async defer onerror="googleError()">
     </script>
